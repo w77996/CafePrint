@@ -11,6 +11,11 @@
         android:layout_height="match_parent"
         >
     </com.w77996.cafeprint.view.CustomViews>-->
+   <!-- <com.w77996.cafeprint.view.CircleRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.w77996.cafeprint.view.CircleRelativeLayout>-->
     <com.w77996.cafeprint.view.CircleRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

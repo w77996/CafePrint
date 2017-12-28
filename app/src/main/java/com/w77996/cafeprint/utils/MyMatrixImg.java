@@ -44,21 +44,14 @@ public class MyMatrixImg extends ImageView {
     private static final int MODE_ZOOM = 2;// 缩放模式
     private int mode = MODE_NONE;
 
-    public MyMatrixImg(Context context){
-        super(context);
+
+    public MyMatrixImg(Context context, AttributeSet attrs) {
+        super(context, attrs);
         this.mContext = context;
 
         // 初始化
         init();
     }
-    public MyMatrixImg(Context context, AttributeSet attrs) {
-        super(context, attrs);
-
-    }
-    /**
-     * 绘制圆形图片
-     * @author caizhiming
-     */
 
     private void init() {
         /*
@@ -81,10 +74,9 @@ public class MyMatrixImg extends ImageView {
          * 设置图片资源
          */
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.k);
-        bitmap = Bitmap.createScaledBitmap(bitmap, Screenwidth, Screenwidth, true);
+        bitmap = Bitmap.createBitmap(bitmap);
         setImageBitmap(bitmap);
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
