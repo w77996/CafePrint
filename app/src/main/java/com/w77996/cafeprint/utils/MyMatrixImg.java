@@ -70,12 +70,17 @@ public class MyMatrixImg extends ImageView {
         int Screenwidth = outMetrics.widthPixels;
         int Screenheight = outMetrics.heightPixels;
 
-        /*
+      /*  *//*
          * 设置图片资源
-         */
+         *//*
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.k);
         bitmap = Bitmap.createBitmap(bitmap);
-        setImageBitmap(bitmap);
+        setImageBitmap(bitmap);*/
+    }
+
+    @Override
+    public void setImageBitmap(Bitmap bm) {
+        super.setImageBitmap(bm);
     }
 
     @Override

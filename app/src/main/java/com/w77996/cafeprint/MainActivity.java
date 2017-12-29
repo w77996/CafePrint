@@ -2,12 +2,15 @@ package com.w77996.cafeprint;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.lzy.imagepicker.ImagePicker;
@@ -47,10 +50,13 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     private void initView() {
         mview = new CircleRelativeLayout(getApplicationContext());
+        mview = (CircleRelativeLayout)findViewById(R.id.cl);
+       // mview.set
        // mMyMatrixImg = new MyMatrixImg(getApplicationContext());
        // mview.addView(mMyMatrixImg);
         mPhoto = (Button)findViewById(R.id.btn_photo);
         mWidth =  Utils.getDisplayWidth(this);
+        //mview.setLayoutParams(new ReL.LayoutParams(mWidth, mWidth));
        // mCustomViews = (CustomViews) findViewById(R.id.cv);
     }
 
@@ -82,7 +88,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
         if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
             if (data != null && requestCode == 100) {
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                Log.d("MainActivity",images.size()+"");
+                Log.d("MainActivity",images.size()+" " +images.get(0).path+images.get(0).name);
+               // Bitmap bm = BitmapFactory.decodeFile(images.get(0).path+images.get(0).name);
+              //  mMyMatrixImg.setImageBitmap(bm);
                /* MyAdapter adapter = new MyAdapter(images);
                 gridView.setAdapter(adapter);*/
             } else {
