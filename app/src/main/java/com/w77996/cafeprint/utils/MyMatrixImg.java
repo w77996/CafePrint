@@ -52,7 +52,9 @@ public class MyMatrixImg extends ImageView {
         // 初始化
         init();
     }
-
+    public MyMatrixImg(Context context) {
+        this(context, null);
+    }
     private void init() {
         /*
          * 实例化对象
@@ -72,8 +74,8 @@ public class MyMatrixImg extends ImageView {
 
       /*  *//*
          * 设置图片资源
-         *//*
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.k);
+         *//**/
+      /*  Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.k);
         bitmap = Bitmap.createBitmap(bitmap);
         setImageBitmap(bitmap);*/
     }
@@ -176,4 +178,23 @@ public class MyMatrixImg extends ImageView {
         double radius = Math.atan2(deltaY, deltaX);
         return (float) Math.toDegrees(radius);
     }
+
+  /*  @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        canvas.drawColor(Color.BLUE);//设置画布背景方便观察
+      //  Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.photo);//夹在要画的图片，这里从资源文件，从其他地方也是可以的，比如sd卡
+       // Bitmap out = Bitmap.createBitmap(bitmap.getWidth(),bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+      //  Bitmap bitmap = getR
+        Canvas canvas1 = new Canvas(out);
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        canvas1.drawCircle(width/2,height/2,radius,paint);//画一个圆，辅助作用，应为这是先画的！
+        //canvas1.drawCircle(0,0,radius,paint);//这个注视你可以尝试去掉，去掉你会发现，这是取先画的全部操作的并集，此时辅助区域变为这个并集
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));//DST先画，SRC后画，SRC_IN是取并集中属于后画的（有点拗口自己理解）
+        canvas1.drawBitmap(bitmap,0,0,paint);//从这可以看出，先画（圆）和后画（bitmap）的交集为圆，而刚好圆属于整合bitmap，此时只画圆部分的bitmap，而不是整个bitmap
+        canvas.drawBitmap(out,0,0,null);//最后只是简单的将一个为圆的bitmap画上去而已
+        //canvas.drawBitmap(out,0,0,new Paint());//这个可以发现，其实只要不是带有Xfermode的画笔就可以了
+    }*/
 }

@@ -21,7 +21,7 @@ import android.view.View;
  */
 public class RoundViewDelegate{
     private final RectF roundRect = new RectF();
-    private float rect_adius = 10;  //单位为像素
+    private float rect_adius = 1000;  //单位为像素
     private final Paint maskPaint = new Paint();
     private final Paint zonePaint = new Paint();
     private View mView;

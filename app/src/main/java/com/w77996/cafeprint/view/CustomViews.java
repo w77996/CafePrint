@@ -74,7 +74,7 @@ public class CustomViews extends ViewGroup{
          * 第三个参数是圆的半径，第四个参数则为我们的画笔
          *
          */
-        canvas.drawCircle(screenWidth , screenWidth, radial, mPaint);
+        canvas.drawCircle(screenWidth/2 , screenWidth/2, radial, mPaint);
 
     }
 
