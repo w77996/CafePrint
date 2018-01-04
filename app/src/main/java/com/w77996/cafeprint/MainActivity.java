@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,9 +20,11 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.imagepicker.util.BitmapUtil;
 import com.lzy.imagepicker.view.CropImageView;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -36,6 +39,10 @@ import com.w77996.cafeprint.view.CircleRelativeLayout;
 import com.w77996.cafeprint.view.CustomViews;
 import com.w77996.cafeprint.view.RoundRelativeLayout;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +52,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button mPic;
     Button mInput;
     //CustomViews mCustomViews;
-    private CustomViews mCustomView;
+   // private CustomViews mCustomView;
     MyMatrixImg mMyMatrixImg;
    // CircleRelativeLayout mview;
+    com.w77996.cafeprint.view.CropImageView mCropImageView;
     int mWidth;
     private ImagePicker imagePicker;
     private ImageView mImage;
-
+    private Bitmap mBitmap;
     /**
      * 请求CAMERA权限码
      */
@@ -94,8 +102,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
        // mview = new CircleRelativeLayout(getApplicationContext());
        // mview = (CircleRelativeLayout)findViewById(R.id.cl);
        // mview.set
+        mCropImageView = (com.w77996.cafeprint.view.CropImageView)findViewById(R.id.img);
         //mMyMatrixImg = new MyMatrixImg();
-        mMyMatrixImg = (MyMatrixImg)findViewById(R.id.img) ;
+      //  mMyMatrixImg = (MyMatrixImg)findViewById(R.id.img) ;
+
         mImage = (ImageView)findViewById(R.id.img2);
         mInput = (Button)findViewById(R.id.btn_input);
        // RoundRelativeLayout r = (RoundRelativeLayout)findViewById(R.id.rl);
@@ -104,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mPic = (Button)findViewById(R.id.btn_select_pic);
         mWidth =  Utils.getDisplayWidth(this);
         //mview.setLayoutParams(new ReL.LayoutParams(mWidth, mWidth));
-        mCustomView = (CustomViews) findViewById(R.id.cv);
+       // mCustomView = (CustomViews) findViewById(R.id.cv);
     }
 
     private void initImageView(){
@@ -119,6 +129,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imagePicker.setFocusHeight(mWidth);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
        /* imagePicker.setOutPutX(mWidth);//保存文件的宽度。单位像素
         imagePicker.setOutPutY(mWidth);//保存文件的高度。单位像素*/
+       // mCropImageView.setFocusStyle(imagePicker.getStyle());
+        mCropImageView.setFocusWidth(imagePicker.getFocusWidth());
+        mCropImageView.setFocusHeight(imagePicker.getFocusHeight());
     }
     @Override
     public void onClick(View view) {
@@ -133,7 +146,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(intent2, 100);
                 break;
             case R.id.btn_input:
+              /*  mMyMatrixImg.setDrawingCacheEnabled(true);
+                Bitmap bit =  mMyMatrixImg.getDrawingCache();
+
+                mMyMatrixImg.buildDrawingCache(true);
+                mMyMatrixImg.buildDrawingCache();
+                Bitmap bitmap = mMyMatrixImg.getDrawingCache();
+                saveBitmapFile(bitmap);
+                mMyMatrixImg.setDrawingCacheEnabled(false);*/
+               /* mCropImageView.setDrawingCacheEnabled(true);
+                Bitmap bit =  mCropImageView.getDrawingCache();
+
+                mCropImageView.buildDrawingCache(true);
+                mCropImageView.buildDrawingCache();
+                Bitmap bitmap = mCropImageView.getDrawingCache();
+                saveBitmapFile(bitmap);
+                mCropImageView.setDrawingCacheEnabled(false);*/
+               /* if(bit == null){
+
+                }*/
                 break;
+        }
+    }
+
+    public void saveBitmapFile(Bitmap bitmap){
+
+        File temp = new File("/sdcard/1delete/");//要保存文件先创建文件夹
+        if (!temp.exists()) {
+            temp.mkdir();
+        }
+        ////重复保存时，覆盖原同名图片
+        File file=new File("/sdcard/1delete/1.jpg");//将要保存图片的路径和图片名称
+        //    File file =  new File("/sdcard/1delete/1.png");/////延时较长
+        try {
+            BufferedOutputStream bos= new BufferedOutputStream(new FileOutputStream(file));
+           bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     /**
@@ -158,6 +210,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //Toast.makeText(getApplicationContext(),"tewafdasfa",Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplication(), CaptureActivity.class);
                         startActivityForResult(intent, REQUEST_CODE);
+                        break;
+                    case R.id.action_down:
+                        //Toast.makeText(getApplicationContext(),"tewafdasfa",Toast.LENGTH_SHORT).show();
+                        Intent intent2 = new Intent(getApplication(), CaptureActivity.class);
+                        startActivityForResult(intent2, 123);
                         break;
                     default:
                            break;
@@ -184,21 +241,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (data != null && requestCode == 100) {
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                 Log.d("MainActivity",images.size()+" " +images.get(0).path+"name :" +images.get(0).name);
-               /* Bitmap bm = BitmapFactory.decodeFile(images.get(0).path);
-                bm = Bitmap.createBitmap(bm);
-                mMyMatrixImg.setImageBitmap(bm);*/
-                imagePicker.getImageLoader().displayImage(MainActivity.this, images.get(0).path, mMyMatrixImg, mWidth, mWidth);
-
-                mMyMatrixImg.setDrawingCacheEnabled(true);
-               Bitmap bit =  mMyMatrixImg.getDrawingCache();
-               // Bitmap bm = BitmapFactory.d(images.get(0).path);
-              //  bit = Bitmap.createBitmap(bit);
-                /*Glide.with(this)
-                        .load(bit)
-                        .into(mImage);*/
-                //Glide.with(this).l
-               /* MyAdapter adapter = new MyAdapter(images);
-                gridView.setAdapter(adapter);*/
+               /* BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(images.get(0).path, options);
+                DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                options.inSampleSize = Utils.calculateInSampleSize(options, displayMetrics.widthPixels, displayMetrics.heightPixels);
+                options.inJustDecodeBounds = false;
+                mBitmap = BitmapFactory.decodeFile(images.get(0).path, options);*/
+                imagePicker.getImageLoader().displayImage(MainActivity.this, images.get(0).path, mImage, mWidth, mWidth);
+               // mCropImageView.setImageBitmap(mCropImageView.rotate(mBitmap, BitmapUtil.getBitmapDegree(images.get(0).path)));
             } else {
                 Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
             }
@@ -216,8 +267,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }
             }
+        }else if(requestCode == 123){
+            //处理扫描结果（在界面上显示）
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCropImageView.setOnBitmapSaveCompleteListener(null);
+        if (null != mBitmap && !mBitmap.isRecycled()) {
+            mBitmap.recycle();
+            mBitmap = null;
+        }
+    }
 
 }

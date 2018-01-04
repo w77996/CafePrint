@@ -6,7 +6,11 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="0"
-        android:title="fd"
-        app:showAsAction="always" />
-
+        android:title="扫描上传"
+         />
+    <item
+        android:id="@+id/action_down"
+        android:orderInCategory="1"
+        android:title="下载APP"
+         />
 </menu>
