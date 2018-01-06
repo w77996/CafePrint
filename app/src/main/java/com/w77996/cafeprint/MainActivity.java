@@ -211,11 +211,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Intent intent = new Intent(getApplication(), CaptureActivity.class);
                         startActivityForResult(intent, REQUEST_CODE);
                         break;
-                    case R.id.action_down:
-                        //Toast.makeText(getApplicationContext(),"tewafdasfa",Toast.LENGTH_SHORT).show();
-                        Intent intent2 = new Intent(getApplication(), CaptureActivity.class);
-                        startActivityForResult(intent2, 123);
-                        break;
                     default:
                            break;
                    }
@@ -254,20 +249,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show();
             }
         }else if (requestCode == REQUEST_CODE) {
-            //处理扫描结果（在界面上显示）
-            if (null != data) {
-                Bundle bundle = data.getExtras();
-                if (bundle == null) {
-                    return;
-                }
-                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
-                    String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
-                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
-                    Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
-                }
-            }
-        }else if(requestCode == 123){
             //处理扫描结果（在界面上显示）
             if (null != data) {
                 Bundle bundle = data.getExtras();
